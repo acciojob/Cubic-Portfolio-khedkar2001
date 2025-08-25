@@ -1,16 +1,184 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cubic Portfolio — Saurabh Khedkar</title>
+  <style>
+    /* ====== Core sizing (responsive via CSS variable) ====== */
+    :root {
+      /* Change --size to quickly test responsiveness */
+      --size: 200px;           /* Scene width & height (hint) */
+      --duration: 10s;         /* Animation duration (hint) */
+      --gap: 10px;             /* Padding inside each face */
+      --radius: 14px;          /* Rounded corners for faces */
+      --bg: #0b1020;           /* Page background */
+      --accent: #6ee7ff;       /* Accent color */
+      --text: #e8f1ff;         /* Face text color */
+      --shadow: rgba(0,0,0,.25);
+    }
+
+    /* ====== Page aesthetics (not required, just pretty) ====== */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(1200px 600px at 70% 20%, #17223c 0%, #0b1020 50%, #070b16 100%);
+      color: var(--text);
+      font: 500 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    }
+
+    .wrap {
+      display: grid;
+      gap: 18px;
+      justify-items: center;
+    }
+
+    .title {
+      font-size: clamp(16px, 3vw, 22px);
+      letter-spacing: .5px;
+      opacity: .9;
+    }
+
+    /* ====== Scene (hint: scene-1, 200px, perspective: 800px) ====== */
+    .scene-1 {
+      --perspective: 800px;
+      width: var(--size);
+      height: var(--size);
+      perspective: var(--perspective);
+      position: relative;
+      /* a subtle glow floor */
+      filter: drop-shadow(0 18px 22px var(--shadow));
+    }
+
+    /* ====== Cube (hint: cube-1, 100%, position, preserve-3d) ====== */
+    .cube-1 {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d; /* required */
+      animation: rotateCube var(--duration) linear infinite; /* required */
+    }
+
+    /* Utility numbers derived from --size so faces follow scene changes */
+    .cube-1 { 
+      --face: calc(var(--size) / 2);   /* each face is half the scene */
+      --tz: calc(var(--face) / 2);     /* how far to push a face */
+    }
+
+    /* ====== Face base styles (hint: absolute, 100px x 100px equivalent) ====== */
+    .face {
+      position: absolute;
+      width: var(--face);
+      height: var(--face);
+      padding: var(--gap);
+      border: 2px solid color-mix(in oklab, var(--accent), white 15%);
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background:
+        linear-gradient(180deg, color-mix(in oklab, var(--accent), #000 85%), #0c152e);
+      color: var(--text);
+      box-shadow: 0 8px 18px -8px var(--shadow) inset, 0 2px 10px -6px var(--shadow);
+      backdrop-filter: blur(2px) saturate(120%);
+    }
+
+    .face h3 {
+      margin: 0 0 6px;
+      font-size: clamp(12px, 2.4vw, 15px);
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      opacity: .9;
+    }
+    .face p { margin: 0; font-size: clamp(11px, 2.3vw, 14px); opacity: .95; }
+
+    /* ====== Place each face in 3D (hint: specific transforms) ====== */
+    .front  { transform: translateZ(var(--tz)); }
+    .back   { transform: rotateY(180deg) translateZ(var(--tz)); }
+    .right  { transform: rotateY( 90deg) translateZ(var(--tz)); }
+    .left   { transform: rotateY(-90deg) translateZ(var(--tz)); }
+    .top    { transform: rotateX( 90deg) translateZ(var(--tz)); }
+    .bottom { transform: rotateX(-90deg) translateZ(var(--tz)); }
+
+    /* ====== Animation (hint: keyframes name rotateCube, 10s, infinite) ====== */
+    @keyframes rotateCube {
+      0%   { transform: rotateX(0deg)   rotateY(0deg); }
+      25%  { transform: rotateX(90deg)  rotateY(45deg); }
+      50%  { transform: rotateX(180deg) rotateY(180deg); }
+      75%  { transform: rotateX(270deg) rotateY(225deg); }
+      100% { transform: rotateX(360deg) rotateY(360deg); }
+    }
+
+    /* ====== Responsive helpers / hover pause ====== */
+    .scene-1:has(.cube-1:hover) .cube-1 { animation-play-state: paused; }
+
+    /* widen scene quickly by changing --size using media queries if desired */
+    @media (min-width: 780px) {
+      :root { --size: 220px; }
+    }
+    @media (min-width: 1080px) {
+      :root { --size: 260px; }
+    }
+  </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
+  <div class="wrap">
+    <div class="title">Cubic Portfolio — <strong>Saurabh Khedkar</strong></div>
 
+    <!-- ====== Scene (class must be scene-1) ====== -->
+    <div class="scene-1">
+      <!-- ====== Cube (class must be cube-1) ====== -->
+      <div class="cube-1">
+        <!-- Each face must exist: front, back, left, right, top, bottom -->
+        <section class="face front">
+          <div>
+            <h3>About</h3>
+            <p>Web developer crafting clean, responsive UIs.</p>
+          </div>
+        </section>
+
+        <section class="face back">
+          <div>
+            <h3>Skills</h3>
+            <p>HTML • CSS • JS • React • Git</p>
+          </div>
+        </section>
+
+        <section class="face right">
+          <div>
+            <h3>Hobbies</h3>
+            <p>Reading, photography, weekend treks</p>
+          </div>
+        </section>
+
+        <section class="face left">
+          <div>
+            <h3>Likes</h3>
+            <p>Minimal design, good coffee, open‑source</p>
+          </div>
+        </section>
+
+        <section class="face top">
+          <div>
+            <h3>Dislikes</h3>
+            <p>Unsemantic markup &amp; janky UI</p>
+          </div>
+        </section>
+
+        <section class="face bottom">
+          <div>
+            <h3>Goals</h3>
+            <p>Build fast, accessible experiences</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Optional usage tip (not required by spec) -->
+    <p style="opacity:.7; font-size:12px; margin: 0; text-align:center">Tip: change <code>--size</code> in <code>:root</code> (e.g., 160px → 320px) to test responsiveness.</p>
+  </div>
 </body>
-
 </html>
